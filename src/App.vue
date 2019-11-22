@@ -1,28 +1,85 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="row center-align">
+      <div class="col s12">
+        <img alt="Vue logo" src="./assets/logo.png" />
+      </div>
+    </div>
+
+    <CardPlate :cards="cards" @flip-card="flipCard"></CardPlate>
+
+    <button @click="shuffleArray">Randomize</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CardPlate from "./components/CardPlate.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
-  }
-}
-</script>
+    CardPlate
+  },
+  data() {
+    return {
+      cards: [
+        {
+          id: 0,
+          name: "star",
+          isFaceUp: false
+        },
+        {
+          id: 1,
+          name: "sun",
+          isFaceUp: false
+        },
+        {
+          id: 2,
+          name: "sun",
+          isFaceUp: false
+        },
+        {
+          id: 3,
+          name: "leaf",
+          isFaceUp: false
+        },
+        {
+          id: 4,
+          name: "moon",
+          isFaceUp: false
+        },
+        {
+          id: 5,
+          name: "star",
+          isFaceUp: false
+        },
+        {
+          id: 6,
+          name: "leaf",
+          isFaceUp: false
+        },
+        {
+          id: 7,
+          name: "moon",
+          isFaceUp: false
+        }
+      ]
+    };
+  },
+  methods: {
+    shuffleArray() {
+      this.cards.forEach(card => {
+        card.isFaceUp = false;
+      });
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+      this.cards.sort(function() {
+        return 0.5 - Math.random();
+      });
+    },
+    flipCard(id) {
+      const card = this.cards.find(card => card.id === id);
+      card.isFaceUp = !card.isFaceUp;
+    }
+  }
+};
+</script>
