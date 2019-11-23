@@ -5,10 +5,10 @@
         <img alt="Vue logo" src="./assets/logo.png" />
       </div>
     </div>
-
+    {{cardsCanBeFlipped}}
     <CardPlate :cards="cards"></CardPlate>
 
-    <button @click="flipCardsFaceDown">Randomize</button>
+    <button class="btn waves waves-light" @click="flipCardsFaceDown">Randomize</button>
   </div>
 </template>
 
@@ -28,58 +28,58 @@ export default {
         {
           id: 0,
           name: "star",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 1,
           name: "sun",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 2,
           name: "sun",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 3,
           name: "leaf",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 4,
           name: "moon",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 5,
           name: "star",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 6,
           name: "leaf",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         },
         {
           id: 7,
           name: "moon",
-          isFaceUp: false,
+          isFaceUp: true,
           isTransitioning: false,
-          canBeFlipped: true
+          canBeFlipped: false
         }
       ].sort(function() {
         return 0.5 - Math.random();
@@ -99,9 +99,9 @@ export default {
         card.isFaceUp = false;
       });
 
-      setTimeout(this.shuffleArray, 1000);
+      setTimeout(this.shuffleCards, 1000);
     },
-    shuffleArray() {
+    shuffleCards() {
       this.cards.sort(function() {
         return 0.5 - Math.random();
       });
@@ -112,9 +112,14 @@ export default {
     },
     selectCard(card) {
       if (this.selectedCards.length < 2 && card.canBeFlipped) {
-        card.canBeFlipped = false;
-        this.selectedCards.push(card);
+        const cardIndex = this.selectedCards.indexOf(card);
         card.isFaceUp = !card.isFaceUp;
+
+        if (cardIndex === -1) {
+          this.selectedCards.push(card);
+        } else {
+          this.selectedCards.splice(cardIndex, 1);
+        }
       } else {
         M.toast({
           html: "Wait for the cards to be compared!",
@@ -138,7 +143,6 @@ export default {
         });
         this.selectedCards.forEach(card => {
           card.isFaceUp = false;
-          card.canBeFlipped = true;
         });
       }
       this.selectedCards.length = 0;
@@ -146,18 +150,31 @@ export default {
   },
   mounted() {
     EventBus.$on("card-transition-start", card => {
-      console.log(`Card #${card.id} transition started.`);
+      if (this.cardsCanBeFlipped) {
+        console.log(`Card #${card.id} transition started.`);
+        card.canBeFlipped = false;
+      }
     });
     EventBus.$on("card-transition-end", card => {
-      console.log(`Card #${card.id} transition ended.`);
-      if (this.selectedCards.length === 2) {
-        console.log("2 Cards selected, executing card check.");
-        this.checkSelectedCards();
+      if (this.cardsCanBeFlipped) {
+        console.log(`Card #${card.id} transition ended.`);
+
+        if (this.selectedCards.length === 2) {
+          console.log("2 Cards selected, executing card check.");
+          this.checkSelectedCards();
+        } else {
+          card.canBeFlipped = true;
+        }
       }
     });
     EventBus.$on("flip-card", card => {
       this.selectCard(card);
     });
+  },
+  computed: {
+    cardsCanBeFlipped() {
+      return this.cards.some(card => card.canBeFlipped === true);
+    }
   }
 };
 </script>
