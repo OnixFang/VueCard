@@ -1,7 +1,7 @@
 <template>
   <div class="col s2">
     <div class="card-container">
-      <div class="card" :class="{ flip : cardObj.isFaceUp }" @click="flipCard">
+      <div id="cardElement" class="card" :class="{ flip : cardObj.isFaceUp }" @click="flipCard">
         <figure>
           <img src="../assets/back-card.png" />
         </figure>
@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { log } from 'util';
+import { log } from "util";
+
 export default {
   name: "Card",
   props: {

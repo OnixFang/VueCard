@@ -8,7 +8,7 @@
 
     <CardPlate :cards="cards" @flip-card="flipCard"></CardPlate>
 
-    <button @click="shuffleArray">Randomize</button>
+    <button @click="flipCardsFaceDown">Randomize</button>
   </div>
 </template>
 
@@ -67,11 +67,15 @@ export default {
     };
   },
   methods: {
-    shuffleArray() {
+    flipCardsFaceDown() {
       this.cards.forEach(card => {
         card.isFaceUp = false;
       });
 
+      setTimeout(this.shuffleArray, 700);
+      //this.shuffleArray();
+    },
+    shuffleArray() {
       this.cards.sort(function() {
         return 0.5 - Math.random();
       });
