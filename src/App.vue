@@ -26,44 +26,54 @@ export default {
         {
           id: 0,
           name: "star",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 1,
           name: "sun",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 2,
           name: "sun",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 3,
           name: "leaf",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 4,
           name: "moon",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 5,
           name: "star",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 6,
           name: "leaf",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         },
         {
           id: 7,
           name: "moon",
-          isFaceUp: false
+          isFaceUp: false,
+          canBeFlipped: true
         }
-      ]
+      ].sort(function() {
+        return 0.5 - Math.random();
+      })
     };
   },
   methods: {
@@ -72,17 +82,23 @@ export default {
         card.isFaceUp = false;
       });
 
-      setTimeout(this.shuffleArray, 700);
-      //this.shuffleArray();
+      setTimeout(this.shuffleArray, 1000);
     },
     shuffleArray() {
       this.cards.sort(function() {
         return 0.5 - Math.random();
       });
+
+      this.cards.forEach(card => {
+        card.canBeFlipped = true;
+      });
     },
     flipCard(id) {
       const card = this.cards.find(card => card.id === id);
-      card.isFaceUp = !card.isFaceUp;
+      if (card.canBeFlipped) {
+        card.isFaceUp = !card.isFaceUp;
+        card.canBeFlipped = false;
+      }
     }
   }
 };
