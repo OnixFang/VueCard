@@ -1,7 +1,14 @@
 <template>
-  <div class="col s2">
+  <div class="col s3">
     <div class="card-container">
-      <div id="cardElement" class="card" :class="{ flip : cardObj.isFaceUp }" @click="flipCard">
+      <div
+        id="cardElement"
+        class="card"
+        :class="{ flip : cardObj.isFaceUp }"
+        @click="flipCard"
+        @transitionstart="onTransitionStart"
+        @transitionend="onTransitionEnd"
+      >
         <figure>
           <img src="../assets/back-card.png" />
         </figure>
@@ -14,7 +21,7 @@
 </template>
 
 <script>
-import { log } from "util";
+import EventBus from "../EventBus";
 
 export default {
   name: "Card",
@@ -31,7 +38,13 @@ export default {
   },
   methods: {
     flipCard() {
-      this.$emit("flip-card", this.cardObj.id);
+      EventBus.$emit("flip-card", this.cardObj);
+    },
+    onTransitionStart() {
+      EventBus.$emit("card-transition-start", this.cardObj);
+    },
+    onTransitionEnd() {
+      EventBus.$emit("card-transition-end", this.cardObj);
     }
   }
 };
@@ -43,6 +56,7 @@ export default {
   height: 250px;
   position: relative;
   perspective: 800px;
+  margin: 0.5em 0;
 }
 
 .card {
@@ -66,8 +80,8 @@ export default {
   margin: 0;
   display: block;
   position: absolute;
-  width: 170px;
-  height: 250px;
+  width: 100%;
+  height: 100%;
 }
 
 .back {

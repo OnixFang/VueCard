@@ -1,22 +1,13 @@
 <template>
   <div>
-    <div class="row" v-for="i in 2" :key="i">
-      <div class="col s12 offset-s2">
-        <div v-for="j in 4" :key="j">
-          <Card
-            :cardObj="cards[i > 1 ? j + 3 : j - 1]"
-            :key="cards[i > 1 ? j + 3 : j - 1].id"
-            @flip-card="flipCard"
-          />
-        </div>
-      </div>
+    <div class="row container">
+      <Card v-for="card in cards" :key="card.id" :cardObj="card" />
     </div>
   </div>
 </template>
 
 <script>
-import Card from "./Card.vue";
-import { log } from 'util';
+import Card from "./Card";
 
 export default {
   name: "CardPlate",
@@ -28,11 +19,6 @@ export default {
   },
   components: {
     Card
-  },
-  methods: {
-    flipCard(id) {
-      this.$emit("flip-card", id);
-    }
   }
 };
 </script>
