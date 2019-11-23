@@ -73,7 +73,8 @@ export default {
         }
       ].sort(function() {
         return 0.5 - Math.random();
-      })
+      }),
+      selectedCards: []
     };
   },
   methods: {
@@ -98,6 +99,21 @@ export default {
       if (card.canBeFlipped) {
         card.isFaceUp = !card.isFaceUp;
         card.canBeFlipped = false;
+        this.selectedCards.push(card);
+      }
+
+      this.checkSelectedCards();
+    },
+    checkSelectedCards() {
+      if (this.selectedCards.length === 2) {
+        if (this.selectedCards[0].name !== this.selectedCards[1].name) {
+          this.selectedCards.forEach(card => {
+            card.isFaceUp = false;
+            card.canBeFlipped = true;
+          });
+        }
+
+        this.selectedCards.length = 0;
       }
     }
   }
